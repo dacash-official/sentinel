@@ -1,41 +1,49 @@
-# Dash Sentinel
+# DACash Sentinel
 
-An all-powerful toolset for Dash.
+An all-powerful toolset for DACash.
 
-[![Build Status](https://travis-ci.org/dashpay/sentinel.svg?branch=master)](https://travis-ci.org/dashpay/sentinel)
+[![Build Status](https://travis-ci.org/dacash-official/sentinel.svg?branch=master)](https://travis-ci.org/dacash-official/sentinel)
 
-Sentinel is an autonomous agent for persisting, processing and automating Dash governance objects and tasks, and for expanded functions in the upcoming Dash V13 release (Evolution).
+Sentinel is an autonomous agent for persisting, processing and automating DACash governance objects and tasks, and for expanded functions in the upcoming DACash release rebased on top of Dash V13 release (Evolution).
 
-Sentinel is implemented as a Python application that binds to a local version 12 dashd instance on each Dash Masternode.
+Sentinel is implemented as a Python application that binds to a local dacashd instance on each DACash Masternode.
 
-This guide covers installing Sentinel onto an existing Masternode in Ubuntu 14.04 / 16.04.
+This guide covers installing Sentinel onto an existing Masternode in Ubuntu 16.04 / 18.04.
 
 ## Installation
 
 ### 1. Install Prerequisites
 
-Make sure Python version 2.7.x or above is installed:
-
-    python --version
-
-Update system packages and ensure virtualenv is installed:
+Update system packages and ensure python and virtualenv are installed:
 
     $ sudo apt-get update
-    $ sudo apt-get -y install python-virtualenv
+    $ sudo apt-get -y install python-virtualenv git
 
-Make sure the local Dash daemon running is at least version 12.1 (120100)
+Make sure the local DACash daemon is running:
 
-    $ dash-cli getinfo | grep version
+    $ dacash-cli getinfo | grep version
 
 ### 2. Install Sentinel
 
 Clone the Sentinel repo and install Python dependencies.
 
-    $ git clone https://github.com/dashpay/sentinel.git && cd sentinel
+    $ git clone https://github.com/dacash-official/sentinel.git && cd sentinel
     $ virtualenv ./venv
     $ ./venv/bin/pip install -r requirements.txt
 
-### 3. Set up Cron
+### 3. Test the Configuration
+
+Test the config by running all tests from the sentinel folder you cloned into
+
+    $ ./venv/bin/py.test ./test
+
+Run Sentinel for the first time (may take up to a minute):
+
+    $ ./venv/bin/python bin/sentinel.py
+
+With all tests passing and crontab setup, Sentinel will stay in sync with dacashd and the installation is complete
+
+### 4. Set up Cron
 
 Set up a crontab entry to call Sentinel every minute:
 
@@ -45,19 +53,13 @@ In the crontab editor, add the lines below, replacing '/home/YOURUSERNAME/sentin
 
     * * * * * cd /home/YOURUSERNAME/sentinel && ./venv/bin/python bin/sentinel.py >/dev/null 2>&1
 
-### 4. Test the Configuration
-
-Test the config by running all tests from the sentinel folder you cloned into
-
-    $ ./venv/bin/py.test ./test
-
-With all tests passing and crontab setup, Sentinel will stay in sync with dashd and the installation is complete
+If you run it as root (mot recommended), the path could be /root/sentinel.
 
 ## Configuration
 
-An alternative (non-default) path to the `dash.conf` file can be specified in `sentinel.conf`:
+An alternative (non-default) path to the `dacash.conf` file can be specified in `sentinel.conf`:
 
-    dash_conf=/path/to/dash.conf
+    dacash_conf=/path/to/dacash.conf
 
 ## Troubleshooting
 
@@ -67,11 +69,11 @@ To view debug output, set the `SENTINEL_DEBUG` environment variable to anything 
 
 ## Contributing
 
-Please follow the [DashCore guidelines for contributing](https://github.com/dashpay/dash/blob/master/CONTRIBUTING.md).
+Please follow the [DACash Core guidelines for contributing](https://github.com/dacash-official/dacash/blob/master/CONTRIBUTING.md).
 
 Specifically:
 
-* [Contributor Workflow](https://github.com/dashpay/dash/blob/master/CONTRIBUTING.md#contributor-workflow)
+* [Contributor Workflow](https://github.com/dacash-official/dacash/blob/master/CONTRIBUTING.md#contributor-workflow)
 
     To contribute a patch, the workflow is as follows:
 
@@ -85,4 +87,4 @@ Specifically:
 
 ### License
 
-Released under the MIT license, under the same terms as DashCore itself. See [LICENSE](LICENSE) for more info.
+Released under the MIT license, under the same terms as DACash Core itself. See [LICENSE](LICENSE) for more info.
